@@ -10,7 +10,7 @@ app.use(morgan("dev"));
 app.use(express.urlencoded({extended: true}))
 app.use(express.json())
 
-app.use("/api", tagsRouter)
+app.use("/api/tags", tagsRouter)
 
 app.listen(PORT, () => {
   console.log(`Listening on port: ${PORT}`)
