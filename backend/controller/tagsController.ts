@@ -11,7 +11,6 @@ export async function getTags(req: Request, res: Response): Promise<void> {
       'filter[tag]': 'Work Related',
     })
     const url = `https://api.up.com.au/api/v1/transactions?${params}`;
-    console.log(url);
 
     const response = await Bun.fetch(url, {
       headers: {"Authorization": "Bearer up:yeah:qVuWhA2DNRyzDRHkTDbKN8aAtwZLGJCGORvVdRqCNTHhF3O0fK3jQcB9VWbYvtq05CCVeiH3lrMrIVC5ieq6bM27eFU8CZxrssDeS01hSbqoZm9RDSIObbcRtcMuc5Wr"}, 
@@ -25,6 +24,8 @@ export async function getTags(req: Request, res: Response): Promise<void> {
       data: apiResponse.data,
       links: apiResponse.links
     }
+
+    console.log(transactions.data.map((data)=> data.attributes.description))
 
     createCSV(transactions);
 
