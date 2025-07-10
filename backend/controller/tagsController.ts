@@ -1,5 +1,6 @@
 import type { Response, Request } from "express"
 import type { Transaction, TransactionResource, Links } from "../utils/types";
+import { getByTags } from "../up-api/api";
 
 export async function getTransactionByTag(req: Request, res: Response): Promise<void> {
 
@@ -9,11 +10,7 @@ export async function getTransactionByTag(req: Request, res: Response): Promise<
     const params = new URLSearchParams({
       'filter[tag]': `${tag}`,
     })
-    const url = `https://api.up.com.au/api/v1/transactions?${params}`;
-
-    const response = await Bun.fetch(url, {
-      headers: {"Authorization": "Bearer up:yeah:qVuWhA2DNRyzDRHkTDbKN8aAtwZLGJCGORvVdRqCNTHhF3O0fK3jQcB9VWbYvtq05CCVeiH3lrMrIVC5ieq6bM27eFU8CZxrssDeS01hSbqoZm9RDSIObbcRtcMuc5Wr"}, 
-    })
+    const response = await getByTags(params) 
 
     const apiResponse = await response.json() as {
       data: TransactionResource[],
@@ -41,29 +38,3 @@ export async function getTransactionByTag(req: Request, res: Response): Promise<
 
 }
 
-export async function ping(req: Request, res: Response): Promise<void> {
-
-  try {
-    const response = await Bun.fetch('https://api.up.com.au/api/v1/util/ping', {
-      headers: {
-        "Authorization": "Bearer up:yeah:qVuWhA2DNRyzDRHkTDbKN8aAtwZLGJCGORvVdRqCNTHhF3O0fK3jQcB9VWbYvtq05CCVeiH3lrMrIVC5ieq6bM27eFU8CZxrssDeS01hSbqoZm9RDSIObbcRtcMuc5Wr" 
-      }
-    })
-
-    const body:any = await response.json();
-
-    res.status(200).json({
-      success: true,
-      output: body 
-    });
-
-    return;
-
-  } catch(e:any){
-    res.status(500).json({
-      success: false,
-      output: `Error: ${e}` 
-    });
-    return;
-  }
-}
