@@ -4,7 +4,7 @@ import { getByTags } from "../up-api/api";
 
 export async function getTransactionByTag(req: Request, res: Response): Promise<void> {
 
-  const tag = req.body 
+  const tag = req.body.tag 
 
   try{
     const params = new URLSearchParams({
