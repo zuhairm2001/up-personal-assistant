@@ -1,14 +1,13 @@
 import type { Response, Request } from "express"
 import type { Transaction, TransactionResource, Links } from "../utils/types";
-import { createCSV } from "../utils/csvExport";
 
-export async function getTags(req: Request, res: Response): Promise<void> {
+export async function getTransactionByTag(req: Request, res: Response): Promise<void> {
 
   const tag = req.body 
 
   try{
     const params = new URLSearchParams({
-      'filter[tag]': 'Work Related',
+      'filter[tag]': `${tag}`,
     })
     const url = `https://api.up.com.au/api/v1/transactions?${params}`;
 
@@ -25,26 +24,20 @@ export async function getTags(req: Request, res: Response): Promise<void> {
       links: apiResponse.links
     }
 
-    console.log(transactions.data.map((data)=> data.attributes.description))
-
-    createCSV(transactions);
-
     res.status(200).json({
       success: true,
       body: transactions 
     });
 
     return;
+
   } catch (e:any){
     res.status(400).json({
       success: false,
       body: `Error: ${e}`
     });
-
     return;
   }
-
-
 
 }
 
@@ -59,12 +52,13 @@ export async function ping(req: Request, res: Response): Promise<void> {
 
     const body:any = await response.json();
 
-
     res.status(200).json({
       success: true,
       output: body 
     });
+
     return;
+
   } catch(e:any){
     res.status(500).json({
       success: false,
@@ -72,5 +66,4 @@ export async function ping(req: Request, res: Response): Promise<void> {
     });
     return;
   }
-
 }
