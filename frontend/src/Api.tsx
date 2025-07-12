@@ -1,10 +1,12 @@
 import type { Transaction, TransactionResource, Links  } from "./utils/types"
-import { useState } from "react"
+import {useState} from "react"
+import { useQueryClient, QueryClient } from "@tanstack/react-query";
 
 
 export default function Api(){
   
   const [list, setList] = useState(['']); 
+  const [item, setItem] = useState('');
 
   const handleClick = async() =>{ 
 
@@ -13,7 +15,7 @@ export default function Api(){
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({tag: "Work Related"}),
+      body: JSON.stringify({tag: "Pay"}),
     })
 
     const typeCastResponse = await response.json() as {
@@ -29,19 +31,18 @@ export default function Api(){
       links: typeCastResponse.body.links,
     } 
 
-    setList(() => transactions.data.map((data) => data.attributes.createdAt))
+    setList(() => transactions.data.map((data) => data.attributes.amount.value))
+    setItem(() => transactions.data[0].attributes.amount.value)
 
   }
-  
-
-
+ 
   return(
     <div>
       <button onClick={handleClick}>
       </button>
-      <p>
-        {list}
-      </p>
+      <ul>
+        {list.map((item, index) => <li key={index}>{item}</li>)}
+      </ul>
 
     </div>
   )

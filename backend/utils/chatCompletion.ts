@@ -16,3 +16,5 @@ export async function complete_chat(chat:string, system_prompt:string){
 
   console.log(response.response)
 }
+
+complete_chat("hello can you meow", "You are a dog")
